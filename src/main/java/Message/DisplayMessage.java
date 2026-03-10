@@ -29,10 +29,7 @@ public class DisplayMessage {
             }
             
             if (param != null) {
-            	messageText.replace("[NAME]", param[0]);
-            	messageText.replace("[YEAR]", param[1]);
-            	messageText.replace("[MONTH]", param[2]);
-            	messageText.replace("[AMOUNT]", param[3]);
+            	messageText = messageText.replace("[NAME]", param[0]).replace("[YEAR]", param[1]).replace("[MONTH]", param[2]).replace("[AMOUNT]", param[3]);
             }
         } catch (Exception e) {
             e.printStackTrace();

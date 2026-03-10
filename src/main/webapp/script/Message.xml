@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Messages>
+    <Message code="INFO0001" text="ID、パスワードは6文字以上10文字以内です" color="RED" />
+    <Message code="INFO0002" text="半角英数字を入力してください" color="RED" />
+    <Message code="INFO0003" text="IDまたはパスワードが違います" color="RED" />
+	<Message code="INFO0004" text="社員名は3文字以上8文字いないです" color="RED" />
+    <Message code="INFO0005" text="英字、日本語文字を入力してください" color="RED" />
+    <Message code="INFO0006" text="新規登録が完了しました" color="BLUE" />
+	<Message code="INFO0007" text="登録を変更しました" color="BLUE" />
+    <Message code="INFO0008" text="[NAME]さんを削除してもよろしいですか？" color="BLACK" />
+    <Message code="INFO0009" text="[NAME]さんを削除しました" color="BLACK" />
+	<Message code="INFO0010" text="文字数は7文字まで、数字のみ入力してください" color="BLACK" />
+    <Message code="INFO0011" text="入力値が不正です" color="BLACK" />
+    <Message code="INFO0012" text="パスワードが一致しません" color="BLACK" />
+	<Message code="INFO0013" text="登録できませんでした。既に存在するIDです" color="BLACK" />
+    <Message code="INFO0014" text="[NAME]さんの[YEAR]年[MONTH]月の給与を￥[AMOUNT]に更新しました" color="BLUE" />
+    <Message code="INFO0015" text="存在しない社員です" color="RED" />
+	<Message code="INFO0016" text="社員を選択してください" color="RED" />
+    <Message code="INFO0017" text="エラーが発生しました。システム担当へ連絡してください。" color="BLACK" />
+</Messages>

@@ -3,7 +3,7 @@
 <%
 	String staffSession = (String) session.getAttribute("loggedInStaffId");
 	if (staffSession == null) {
- 		
+		response.sendRedirect("login.jsp");
 	} 
 %>
 <!DOCTYPE html>
@@ -49,10 +49,10 @@
 	<div></div>
 	<div></div><div></div><div></div>
 	<div class="menurow">メニュー</div>
-	<div class="menurow"><a href="/PayrollSystem/StaffInfoServlet?title=update">社員情報変更</a></div>
+	<div class="menurow"><a href="/PayrollSystem/StaffInfoServlet?isDisp=true&title=update&staff_id=${sessionScope.loggedInStaffId}&from=menu">社員情報変更</a></div>
 	<div class="menurow"><a href="" class="okOnly">給与一覧</a></div>
-	<div class="menurow adminmenu"><a href="/PayrollSystem/StaffAdminServlet">社員管理</a></div>
-	<div class="menurow adminmenu" class="okOnly"><a href="">給与管理</a></div>
+	<div class="menurow adminmenu"><a href="/PayrollSystem/StaffAdminServlet?isDisp=true&after_delete=false">社員管理</a></div>
+	<div class="menurow adminmenu"><a href="" class="okOnly">給与管理</a></div>
 </div>
 </body>
 <script>

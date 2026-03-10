@@ -52,8 +52,9 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json; charset=SJIS;");
         if (userExist) {
         	jsonResponse = "{\"status\": 200}"; 
-        	StaffBean loggedInStaff = staffLogic.getStaffData(staff_id);
+        	StaffBean loggedInStaff = staffLogic.GetStaffData(staff_id);
         	HttpSession session = request.getSession(); 
+        	session.setAttribute("loggedInStaffCode", loggedInStaff.getStaff_code());
             session.setAttribute("loggedInStaffId", loggedInStaff.getStaff_id());
             session.setAttribute("loggedInStaffName", loggedInStaff.getStaff_name());
             session.setAttribute("loggedInStaffIsAdmin", loggedInStaff.isAdmin());

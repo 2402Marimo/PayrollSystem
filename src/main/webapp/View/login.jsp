@@ -14,6 +14,7 @@
 <title>ログイン画面</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="http://localhost:8080/PayrollSystem/script/inputcheck.js"></script>
+<script src="http://localhost:8080/PayrollSystem/script/Message.js"></script>
 <style>
 	.container {
 	    display: flex;
@@ -108,7 +109,8 @@
 		}
 		
 		if (!passFlag) {
-			$("#message").text('ID、パスワードは6文字以上10文字以内です');
+			let returnMessage = getMessage("INFO0009", "");
+			$("#message").text(returnMessage);
 			$("#loginBtn").prop('disabled', true);
 		} else {
 			let staff_id = $("#staff_id").val();
