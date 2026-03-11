@@ -186,6 +186,7 @@ if (staffSession == null) {
 			    				showNextHiddenRow();
 			    				selected_id = '';
 			    				selected_name='';
+			    				$("#message").html("");
 			    			}
 			  			},
 			  			error: function(xhr, textStatus, errorThrown) {

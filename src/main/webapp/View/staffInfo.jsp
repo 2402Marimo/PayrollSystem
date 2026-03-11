@@ -16,7 +16,6 @@
 <meta charset="UTF-8">
 <title>社員情報変更・新規登録画面</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="http://localhost:8080/PayrollSystem/script/inputcheck.js"></script>
 <script src="http://localhost:8080/PayrollSystem/script/Message.js"></script>
 	<meta charset="UTF-8">
 	<title>メニュー画面</title>
@@ -121,7 +120,6 @@
 		
 		function checkAdmin() {
 			var isAdmin = ${sessionScope.loggedInStaffIsAdmin};
-			console.log(isAdmin)
 			if (!isAdmin) 
 				$(".adminmenu").hide();
 		}
@@ -152,9 +150,10 @@
 		checkAdmin();
 		
 		var staff_code = 0;
+		var loggedInStaffCode = ${sessionScope.loggedInStaffCode};
 		var staff_id = '${param.staff_id}';
 		
-		if (title == 'update') {
+		function GetStaffData() {
 			$.ajax({
 				type: "GET",
 				url: "/PayrollSystem/StaffInfoServlet?isDisp=false&staff_id="+staff_id, 
@@ -162,7 +161,6 @@
 				success: function(result){
 					$("#tb_staff_name").val(result.staff_name);
 					$("#tb_staff_id").val(result.staff_id);
-					$("#tb_staff_password").val(result.staff_password);
 					$("input[type='radio'][name='role'][value=" + result.authority_cd + "]").prop('checked', true);
 					staff_code = result.staff_code;
 	  			},
@@ -173,6 +171,9 @@
 			});
 		}
 		
+		if (title == 'update') 
+			GetStaffData();
+			
 		$("#submitBtn").click(function(){	
 			let input_staff_id = $("#tb_staff_id").val()
 			let input_staff_name = $("#tb_staff_name").val()
@@ -198,11 +199,12 @@
 	    				$("#message").css("color","blue");
 	    				$("#message").text(getMessage(result.message, ""));
 	    				if (title=='update') {
-	    					$("#tb_staff_password").val(input_staff_password_new);
+	    					$("#tb_staff_password").val("");
 		    				$("#tb_staff_password_new").val("");
 		    				$("#tb_staff_password_confirm").val("");
-		    				if (input_authority_cd != 1) 
+		    				if (input_authority_cd != 1 && staff_code == loggedInStaffCode) 
 		    					$(".adminmenu").hide();
+		    				GetStaffData();
 	    				} else {
 	    					$("#tb_staff_name").val('')
 	    					$("#tb_staff_id").val('')
@@ -219,7 +221,109 @@
 	  		    }
 			});  
 		});
+		$("#tb_staff_name").focusout(function(){
+			checkInputs(false);
+		});
 		
+		$("#tb_staff_id").focusout(function(){
+			checkInputs(false);
+		});
+		
+		$("#tb_staff_password").focusout(function(){
+			checkInputs(false);
+		});
+		
+		$("#tb_staff_password_new").focusout(function(){
+			checkInputs(false);
+		});
+
+		$("#tb_staff_password_confirm").focusout(function(){
+			if ($("#tb_staff_password_new").val() != $(this).val()) {
+				$("#message").text(getMessage("INFO0012", ""));
+				$("#tb_staff_password_confirm").css("border-color", "red");
+				$("#submitBtn").prop('disabled', true);
+			} else {
+				$("#tb_staff_password_confirm").css("border-color", "black");
+				$("#submitBtn").prop('disabled', false);
+				checkInputs(true);
+			}
+		});
+		
+		const nameCheck = /^[一-龯ぁ-んァ-ヾー々\u3000-\u303F\uFF00-\uFFEF0-9a-zA-Z]*$/
+		const idpassCheck = /^[a-zA-Z0-9]+$/
+		
+		function checkInputs(afterConfirm) {
+			$("#message").text('');
+			$("#message").css("color", "red");
+			var disableSubmit = true;
+			var passOk = false;
+			var msgtext = "";
+			if (!nameCheck.test($("#tb_staff_name").val())){
+				msgtext = getMessage("INFO0004", "");
+				$("#tb_staff_name").css("border-color", "red");
+			} else {
+				if ($("#tb_staff_name").val().length < 3 || $("#tb_staff_name").val().length > 8) {
+					msgtext = getMessage("INFO0005", "");
+					$("#tb_staff_name").css("border-color", "red");
+				} else {
+					$("#tb_staff_name").css("border-color", "black");
+					if (!idpassCheck.test($('#tb_staff_id').val())) {
+						msgtext = getMessage("INFO0001", "");
+						$("#tb_staff_id").css("border-color", "red");
+					} else {
+						if ($('#tb_staff_id').val().length < 6 || $('#tb_staff_id').val().length > 10) {
+							msgtext = getMessage("INFO0002", "");
+							$("#tb_staff_id").css("border-color", "red");
+						} else {
+							$("#tb_staff_id").css("border-color", "black");
+							if ($("#tb_staff_password").is(':hidden') == false) {
+								if (!idpassCheck.test($('#tb_staff_password').val())) {
+									msgtext = getMessage("INFO0002", "");
+									$("#tb_staff_password").css("border-color", "red");
+								} else {
+									if ($('#tb_staff_password').val().length < 6 || $('#tb_staff_password').val().length > 10) {
+										$("#tb_staff_password").css("border-color", "red");
+										msgtext = getMessage("INFO0001", "");
+									} else {
+										$("#tb_staff_password").css("border-color", "black");
+										passOk=true;
+									}
+								}
+							} else {
+								passOk = true;
+							}
+							
+							if (passOk) {
+								if (!idpassCheck.test($('#tb_staff_password_new').val())) {
+									msgtext = getMessage("INFO0002", "");
+									$("#tb_staff_password_new").css("border-color", "red");
+								} else {
+									if ($('#tb_staff_password_new').val().length < 6 || $('#tb_staff_password_new').val().length > 10) {
+										msgtext = getMessage("INFO0001", "");
+										$("#tb_staff_password_new").css("border-color", "red");
+									} else {
+										$("#tb_staff_password_new").css("border-color", "black");
+										if (afterConfirm) {
+											disableSubmit = false;
+										} else {
+											if ($("#tb_staff_password_new").val() != $('#tb_staff_password_confirm').val()) {
+												msgText = getMessage('INFO0012', '');
+												$("#tb_staff_password_confirm").css("border-color", "red");
+											} else {
+												disableSubmit = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			$("#message").text(msgtext);
+			$("#submitBtn").prop('disabled', disableSubmit);
+		}
 	});
 </script>
 </html>

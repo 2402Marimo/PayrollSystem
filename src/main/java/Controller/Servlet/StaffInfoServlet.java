@@ -113,7 +113,7 @@ public class StaffInfoServlet extends HttpServlet {
 				insertStaff.setAdmin(Integer.parseInt(request.getParameter("authority_cd")) == 1);
 				
 				if (staffLogic.insertStaffData(insertStaff)) {
-					jsonResponse = "{\"status\":200, \"message\":\"INFO0007\"}"; 
+					jsonResponse = "{\"status\":200, \"message\":\"INFO0006\"}"; 
 				} else {
 					jsonResponse = "{\"status\":400, \"message\":\"INFO0013\"}"; 
 				}

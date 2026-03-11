@@ -56,7 +56,7 @@ public class StaffLogic {
 
 	public boolean insertStaffData(StaffBean staff) throws Exception {
 		try {
-			if (CheckUserExistById(staff.getStaff_id())) {
+			if (!CheckUserExistById(staff.getStaff_id())) {
 				StaffDAO.InsertStaff(staff);
 				return true;
 			} else {
