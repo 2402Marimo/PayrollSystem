@@ -2,7 +2,6 @@ package Model.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,15 +10,16 @@ import java.util.*;
 import Model.Bean.StaffBean;
 
 public class StaffDAO {
-	final static String url = "";
+	final static String url = "jdbc:postgresql://localhost:5432/PayrollAdmin";
 	
 	public static ArrayList<StaffBean> getAllStaff() {
+		DatabaseAccess.Initialize();
 		ArrayList<StaffBean> staff = new ArrayList<StaffBean>();
-		String sql = "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\"";
-	
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery()) {
+		
+		Properties props = DatabaseAccess.setConnectionProperty();
+		try (Connection conn = DriverManager.getConnection(url, props)) {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM \"PayrollSystem\".\"STAFF_MS\"");
 			
 			while (rs.next()) {
 				StaffBean record = new StaffBean();
@@ -34,6 +34,7 @@ public class StaffDAO {
 				
 				staff.add(record);
 			}
+			conn.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} 
@@ -44,17 +45,19 @@ public class StaffDAO {
 	
 	
 	public boolean UserExist(String staff_id, String staff_password) {
+		DatabaseAccess.Initialize();
+		Properties props = DatabaseAccess.setConnectionProperty();
+		
 		boolean userExist = false;
-		String sql = "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\" where \"STAFF_ID\"=? and \"STAFF_PASS\"=?";
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, staff_id);
-			ps.setString(2, staff_password);
-			ResultSet rs = ps.executeQuery();
+		
+		try (Connection conn = DriverManager.getConnection(url, props)) {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(String.format("SELECT * FROM \"PayrollSystem\".\"STAFF_MS\" where \"STAFF_ID\"='%staff_id' and \"STAFF_PASS\"='%staff_password'", staff_id, staff_password));
 			
 			if (rs.next()) {
 				userExist = true;
 			} 
+			conn.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} 
@@ -62,52 +65,56 @@ public class StaffDAO {
 	}
 	
 	public static void UpdateStaff(StaffBean staff) throws Exception{
-		String sql = "UPDATE \"PayrollSystem\".\"STAFF_MS\" "
-				+ "SET \"STAFF_NAME\"=?, "
-				+ "\"STAFF_ID\"=?, "
-				+ "\"STAFF_PASS\"=?, "
-				+ "\"AUTHORITY_CD\"= ? "
-				+ "WHERE \"STAFF_CODE\"= ?";
+		DatabaseAccess.Initialize();
+		Properties props = DatabaseAccess.setConnectionProperty();
 		
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			ps.setString(1, staff.getStaff_name());
-			ps.setString(2, staff.getStaff_id());
-			ps.setString(3, staff.getStaff_pass());
-			ps.setInt   (4, staff.isAdmin() ? 1 : 0);
-			ps.setInt   (5, staff.getStaff_code());
-			ps.execute();
+		try (Connection conn = DriverManager.getConnection(url, props)) {
+			Statement st = conn.createStatement();
+			String sql = String.format("UPDATE \"PayrollSystem\".\"STAFF_MS\" "
+					+ "SET \"STAFF_NAME\"='%s', "
+					+ "\"STAFF_ID\"='%s', "
+					+ "\"STAFF_PASS\"='%s', "
+					+ "\"AUTHORITY_CD\"= %d"
+					+ " WHERE \"STAFF_CODE\"= " + staff.getStaff_code(), 
+					staff.getStaff_name(), staff.getStaff_id(), staff.getStaff_pass(), staff.isAdmin() ? 1 : 0);
+			st.execute(sql);
+			
+			conn.close();
 		} catch(SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 			throw e;
 		} 
 	}
 	
 	public static void InsertStaff(StaffBean staff) throws Exception{
-		String sql = "INSERT INTO \"PayrollSystem\".\"STAFF_MS\""
-				+ "(\"STAFF_NAME\",\"STAFF_ID\",\"STAFF_PASS\",\"AUTHORITY_CD\") "
-				+ " VALUES (?, ?, ?, ?);";
+		DatabaseAccess.Initialize();
+		Properties props = DatabaseAccess.setConnectionProperty();
 		
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, staff.getStaff_name());
-			ps.setString(2, staff.getStaff_id());
-			ps.setString(3, staff.getStaff_pass());
-			ps.setInt(4, staff.isAdmin() ? 1 : 0);
-			ps.execute();
+		try (Connection conn = DriverManager.getConnection(url, props)) {
+			Statement st = conn.createStatement();
+			String sql = "INSERT INTO \"PayrollSystem\".\"STAFF_MS\""
+					+ "(\"STAFF_NAME\",\"STAFF_ID\",\"STAFF_PASS\",\"AUTHORITY_CD\") "
+					+ " VALUES ('"+ staff.getStaff_name() + "', '" + staff.getStaff_id() + "', '" + staff.getStaff_pass() + "', " + (staff.isAdmin()?1:0) + ");";
+			
+			System.out.println(sql);
+			st.execute(sql);
+			
+			conn.close();
 		} catch(SQLException e) {
 			throw e;
 		} 
 	}
 	
 	public static void DeleteStaff(String staff_id) throws Exception{
-		String sql = "DELETE FROM \"PayrollSystem\".\"STAFF_MS\" WHERE \"STAFF_ID\"= ?";
+		DatabaseAccess.Initialize();
+		Properties props = DatabaseAccess.setConnectionProperty();
 		
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, staff_id);
-			ps.execute();
+		try (Connection conn = DriverManager.getConnection(url, props)) {
+			Statement st = conn.createStatement();
+			st.execute(String.format("DELETE FROM \"PayrollSystem\".\"STAFF_MS\" "
+					+ "WHERE \"STAFF_ID\"= '%s'", staff_id));
+			
+			conn.close();
 		} catch(SQLException e) {
 			throw e;
 		} 

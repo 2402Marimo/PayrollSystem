@@ -4,17 +4,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.postgresql.ds.PGSimpleDataSource;
-
 public class DatabaseAccess {
-	final static String DB_USERNAME = "postgres";
-	final static String DB_PASSWORD = "password";
-	public static PGSimpleDataSource initiateDataSource() {
-		PGSimpleDataSource ds = new PGSimpleDataSource();
-		ds.setUrl("jdbc:postgresql://localhost:5432/PayrollAdmin");
-		ds.setUser(DB_USERNAME);
-		ds.setPassword(DB_PASSWORD);
-		return ds;
+	
+	public static Properties setConnectionProperty() {
+		final String username = "postgres";
+		final String password = "password";
+		
+		Properties props = new Properties();
+		props.setProperty("user", username);
+		props.setProperty("password", password);
+		return props;
 	}
 	
 	public static void Initialize() {
@@ -25,4 +24,14 @@ public class DatabaseAccess {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void CloseConnection(Connection conn) {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

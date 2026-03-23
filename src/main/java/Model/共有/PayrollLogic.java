@@ -25,7 +25,7 @@ public class PayrollLogic {
 	}
 	
 	public void updatePayroll(List<PayrollBean> payrolls) throws Exception {
-		PayrollDAO.setPayrollData(payrolls);
+		PayrollDAO.UpdateStaff(payrolls);
 	}
 	
 	public List<PayrollBean> getPayrollListYearMonth(String yearMonth) {
