@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
 
 import Model.Bean.StaffBean;
 
-public class StaffDAO {
+public class StaffDao {
 	public static ArrayList<StaffBean> getAllStaff() {
 		ArrayList<StaffBean> staff = new ArrayList<StaffBean>();
 		String sql = "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\"";

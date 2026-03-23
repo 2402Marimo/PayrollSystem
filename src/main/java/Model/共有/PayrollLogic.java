@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import Model.Bean.PayrollBean;
-import Model.DAO.PayrollDAO;
+import Model.DAO.PayrollDao;
 
 
 public class PayrollLogic {
 	private List<PayrollBean> payrollList = new ArrayList<>();
 
 	public PayrollLogic() {
-		payrollList = PayrollDAO.getAllPayroll();
+		payrollList = PayrollDao.getAllPayroll();
 	}
 	
 	public List<PayrollBean> getAllPayrollList() {
@@ -25,7 +25,7 @@ public class PayrollLogic {
 	}
 	
 	public void updatePayroll(List<PayrollBean> payrolls) throws Exception {
-		PayrollDAO.setPayrollData(payrolls);
+		PayrollDao.setPayrollData(payrolls);
 	}
 	
 	public List<PayrollBean> getPayrollListYearMonth(String yearMonth) {

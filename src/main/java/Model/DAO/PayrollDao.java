@@ -10,7 +10,7 @@ import java.util.List;
 import Model.Bean.PayrollBean;
 
 
-public class PayrollDAO {
+public class PayrollDao {
 	final static String url = "jdbc:postgresql://localhost:5432/PayrollAdmin";
 	
 	public static ArrayList<PayrollBean> getAllPayroll() {

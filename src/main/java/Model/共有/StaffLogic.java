@@ -1,6 +1,6 @@
 package Model.共有;
 
-import Model.DAO.StaffDAO;
+import Model.DAO.StaffDao;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ public class StaffLogic {
 	private ArrayList<StaffBean> staffList = new ArrayList<>();
 
 	public StaffLogic() {
-		staffList = StaffDAO.getAllStaff();
+		staffList = StaffDao.getAllStaff();
 	}
 	
 	public ArrayList<StaffBean> getStaffList() {
@@ -40,11 +40,11 @@ public class StaffLogic {
 	public boolean setStaffData(StaffBean updateStaff) throws Exception {
 		try {
 			if (!CheckUserExistById(updateStaff.getStaff_id())) {
-				StaffDAO.UpdateStaff(updateStaff);
+				StaffDao.UpdateStaff(updateStaff);
 				return true;
 			} else {
 				if (GetStaffData(updateStaff.getStaff_id()).getStaff_code() == updateStaff.getStaff_code()) {
-					StaffDAO.UpdateStaff(updateStaff);
+					StaffDao.UpdateStaff(updateStaff);
 					return true;
 				} else
 					return false;
@@ -57,7 +57,7 @@ public class StaffLogic {
 	public boolean insertStaffData(StaffBean staff) throws Exception {
 		try {
 			if (!CheckUserExistById(staff.getStaff_id())) {
-				StaffDAO.InsertStaff(staff);
+				StaffDao.InsertStaff(staff);
 				return true;
 			} else {
 				return false;
@@ -69,7 +69,7 @@ public class StaffLogic {
 
 	public boolean deleteStaffData(String staff_id) throws Exception {
 		try {
-			StaffDAO.DeleteStaff(staff_id);
+			StaffDao.DeleteStaff(staff_id);
 			return true;
 		} catch (Exception e) {
 			throw e;
