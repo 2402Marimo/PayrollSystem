@@ -54,12 +54,9 @@ public class LoginServlet extends HttpServlet {
         	jsonResponse = "{\"status\": 200}"; 
         	StaffBean loggedInStaff = staffLogic.GetStaffData(staff_id);
         	HttpSession session = request.getSession(); 
-        	session.setAttribute("loggedInStaffCode", loggedInStaff.getStaff_code());
-            session.setAttribute("loggedInStaffId", loggedInStaff.getStaff_id());
-            session.setAttribute("loggedInStaffName", loggedInStaff.getStaff_name());
-            session.setAttribute("loggedInStaffIsAdmin", loggedInStaff.isAdmin());
+        	session.setAttribute("loggedInStaff", loggedInStaff);
         } else {
-        	String returnMessage = DisplayMessage.getMessageData("INFO0003", null);
+        	String returnMessage = DisplayMessage.getMessageData("INF0003", null);
         	jsonResponse = "{\"status\":400, \"message\":\"" + returnMessage +"\"}"; 
         }
         

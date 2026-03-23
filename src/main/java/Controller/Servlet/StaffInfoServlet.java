@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,7 +76,7 @@ public class StaffInfoServlet extends HttpServlet {
 		if (request.getParameter("type").equalsIgnoreCase(TYPE_UPDATE)) {
 			boolean allow = staffLogic.GetStaffByCodeAndPassword(Integer.parseInt(request.getParameter("staff_code")), request.getParameter("staff_password"));
 			if (!allow) {
-	        	jsonResponse = "{\"status\":400, \"message\":\"INFO0012\"}"; 
+	        	jsonResponse = "{\"status\":400, \"message\":\"INF0012\"}"; 
 			} else {
 				try {
 					StaffBean updateStaff = new StaffBean();
@@ -88,19 +87,22 @@ public class StaffInfoServlet extends HttpServlet {
 					updateStaff.setAdmin(Integer.parseInt(request.getParameter("authority_cd")) == 1);
 					
 					if (staffLogic.setStaffData(updateStaff)) {
-						HttpSession session = request.getSession(); 
+						StaffBean loggedInStaff = (StaffBean) request.getSession().getAttribute("loggedInStaff");
 						
-						if (updateStaff.getStaff_code() == Integer.parseInt(session.getAttribute("loggedInStaffCode").toString())) {
-				            session.setAttribute("loggedInStaffId", updateStaff.getStaff_id());
-				            session.setAttribute("loggedInStaffName", updateStaff.getStaff_name());
-				            session.setAttribute("loggedInStaffIsAdmin", updateStaff.isAdmin());
+						if (updateStaff.getStaff_code() == loggedInStaff.getStaff_code()) {
+							loggedInStaff.setStaff_id(updateStaff.getStaff_id());
+							loggedInStaff.setStaff_name(updateStaff.getStaff_name());
+							loggedInStaff.setAdmin(updateStaff.isAdmin());
+							
+							//　Session Re-set if updating self
+				            request.getSession().setAttribute("loggedInStaff", loggedInStaff);
 						}
-			        	jsonResponse = "{\"status\":200, \"message\":\"INFO0007\"}"; 
+			        	jsonResponse = "{\"status\":200, \"message\":\"INF0007\"}"; 
 					} else {
-						jsonResponse = "{\"status\":400, \"message\":\"INFO0013\"}"; 
+						jsonResponse = "{\"status\":400, \"message\":\"INF0013\"}"; 
 					}
 				} catch (Exception ex) {
-					jsonResponse = "{\"status\":400, \"message\":\"INFO0017\"}";
+					jsonResponse = "{\"status\":400, \"message\":\"INF0017\"}";
 				}
 			}
 		} else if (request.getParameter("type").equalsIgnoreCase(TYPE_INSERT)) {
@@ -113,14 +115,14 @@ public class StaffInfoServlet extends HttpServlet {
 				insertStaff.setAdmin(Integer.parseInt(request.getParameter("authority_cd")) == 1);
 				
 				if (staffLogic.insertStaffData(insertStaff)) {
-					jsonResponse = "{\"status\":200, \"message\":\"INFO0006\"}"; 
+					jsonResponse = "{\"status\":200, \"message\":\"INF0006\"}"; 
 				} else {
-					jsonResponse = "{\"status\":400, \"message\":\"INFO0013\"}"; 
+					jsonResponse = "{\"status\":400, \"message\":\"INF0013\"}"; 
 				}
 	        	
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				 jsonResponse = "{\"status\":400, \"message\":\"INFO0017\"}";
+				 jsonResponse = "{\"status\":400, \"message\":\"INF0017\"}";
 			}
 		} 
 		
