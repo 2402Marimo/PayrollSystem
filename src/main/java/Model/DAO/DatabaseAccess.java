@@ -1,9 +1,5 @@
 package Model.DAO;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Properties;
-
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class DatabaseAccess {
@@ -15,14 +11,5 @@ public class DatabaseAccess {
 		ds.setUser(DB_USERNAME);
 		ds.setPassword(DB_PASSWORD);
 		return ds;
-	}
-	
-	public static void Initialize() {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

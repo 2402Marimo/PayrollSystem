@@ -1,18 +1,14 @@
 package Model.DAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 import Model.Bean.StaffBean;
 
 public class StaffDAO {
-	final static String url = "";
-	
 	public static ArrayList<StaffBean> getAllStaff() {
 		ArrayList<StaffBean> staff = new ArrayList<StaffBean>();
 		String sql = "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\"";
@@ -43,23 +39,17 @@ public class StaffDAO {
 	
 	
 	
-	public boolean UserExist(String staff_id, String staff_password) {
-		boolean userExist = false;
-		String sql = "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\" where \"STAFF_ID\"=? and \"STAFF_PASS\"=?";
-		try (Connection conn = DatabaseAccess.initiateDataSource().getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, staff_id);
-			ps.setString(2, staff_password);
-			ResultSet rs = ps.executeQuery();
-			
-			if (rs.next()) {
-				userExist = true;
-			} 
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} 
-		return userExist;
-	}
+	/*
+	 * public static boolean UserExist(String staff_id, String staff_password) {
+	 * boolean userExist = false; String sql =
+	 * "SELECT * FROM \"PayrollSystem\".\"STAFF_MS\" where \"STAFF_ID\"=? and \"STAFF_PASS\"=?"
+	 * ; try (Connection conn = DatabaseAccess.initiateDataSource().getConnection();
+	 * PreparedStatement ps = conn.prepareStatement(sql)) { ps.setString(1,
+	 * staff_id); ps.setString(2, staff_password); ResultSet rs = ps.executeQuery();
+	 * 
+	 * if (rs.next()) { userExist = true; } } catch(SQLException e) {
+	 * e.printStackTrace(); } return userExist; }
+	 */
 	
 	public static void UpdateStaff(StaffBean staff) throws Exception{
 		String sql = "UPDATE \"PayrollSystem\".\"STAFF_MS\" "
