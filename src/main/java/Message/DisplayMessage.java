@@ -6,11 +6,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import java.io.File;
-import java.util.HashMap;
 
 public class DisplayMessage {
     public static String getMessageData(String messageCode, String[] param) {
-    	String messageText = "isMsg";
+    	String messageText = messageCode;
         try {
         	File file = new File("Message.xml");
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -23,6 +22,7 @@ public class DisplayMessage {
                 Element e = (Element) nList.item(i);
                 
                 if (e.getAttribute("code").equals(messageCode)) {
+                	System.out.println(file.getAbsolutePath());
                 	messageText = e.getAttribute("text");
                 	break;
                 }

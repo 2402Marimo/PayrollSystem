@@ -1,10 +1,18 @@
+<%@page import="Model.Bean.StaffBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	String staffSession = (String) session.getAttribute("loggedInStaffId");
-	if (staffSession == null) {
+	StaffBean loggedInStaff = (StaffBean) session.getAttribute("loggedInStaff");
+	String loggedInStaffName = "";
+	String loggedInStaffId = "";
+	boolean isAdmin = false;
+	if (loggedInStaff == null) {
 		response.sendRedirect("login.jsp");
-	} 
+	} else {
+		loggedInStaffName = loggedInStaff.getStaff_name();
+		loggedInStaffId = loggedInStaff.getStaff_id();
+		isAdmin = loggedInStaff.isAdmin();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -41,7 +49,7 @@
 <div class="container">
 	<div>社員名：
 		<span>
-			${sessionScope.loggedInStaffName}
+			<%= loggedInStaffName %>
 		</span>
 		<a id="logoutLink" href="/PayrollSystem/LogoutServlet">ログアウト</a>
 	</div>
@@ -49,15 +57,14 @@
 	<div></div>
 	<div></div><div></div><div></div>
 	<div class="menurow">メニュー</div>
-	<div class="menurow"><a href="/PayrollSystem/StaffInfoServlet?isDisp=true&title=update&staff_id=${sessionScope.loggedInStaffId}&from=menu">社員情報変更</a></div>
-	<div class="menurow"><a href="" class="okOnly">給与一覧</a></div>
+	<div class="menurow"><a href="/PayrollSystem/StaffInfoServlet?isDisp=true&title=update&staff_id=<%= loggedInStaffId %>&from=menu">社員情報変更</a></div>
+	<div class="menurow"><a href="/PayrollSystem/PayrollServlet?from=menu">給与一覧</a></div>
 	<div class="menurow adminmenu"><a href="/PayrollSystem/StaffAdminServlet?isDisp=true&after_delete=false">社員管理</a></div>
-	<div class="menurow adminmenu"><a href="" class="okOnly">給与管理</a></div>
+	<div class="menurow adminmenu"><a href="/PayrollSystem/PayrollServlet?from=admin">給与管理</a></div>
 </div>
 </body>
 <script>
-	var isAdmin = ${sessionScope.loggedInStaffIsAdmin};
-	if (!isAdmin) {
+	if (!<%= isAdmin %>) {
 		$(".adminmenu").hide();
 	}
 	
