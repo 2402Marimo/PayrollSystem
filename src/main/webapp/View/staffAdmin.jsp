@@ -2,9 +2,10 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	if (session.getAttribute("loggedInStaff") == null) {
-		response.sendRedirect("login.jsp");
-	}
+String staffSession = (String) session.getAttribute("loggedInStaffId");
+if (staffSession == null) {
+	response.sendRedirect("login.jsp");
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -169,7 +170,7 @@
 			if (selected_id=="") {
 				$("#message").text('社員を選択してください');
 			} else {
-				if (confirm(getMessage("INF0008", selected_name))) {
+				if (confirm(getMessage("INFO0008", selected_name))) {
 					$.ajax({
 						type: "POST",
 						url: "/PayrollSystem/StaffAdminServlet", 
@@ -181,7 +182,7 @@
 								$("#message").text(result.message)
 			    			else {
 			    				$("#" + selected_id).remove();
-			    				alert(getMessage("INF0009", selected_name));
+			    				alert(getMessage("INFO0009", selected_name));
 			    				showNextHiddenRow();
 			    				selected_id = '';
 			    				selected_name='';

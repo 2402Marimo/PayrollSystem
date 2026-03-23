@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
     
 <%
-  	if (session.getAttribute("loggedInStaff") != null) {
+  	String staffSession = (String) session.getAttribute("loggedInStaffId");
+  	if (staffSession != null) {
 	 	response.sendRedirect("menu.jsp");
   	} 
 %>
@@ -108,7 +109,7 @@
 		}
 		
 		if (!passFlag) {
-			let returnMessage = getMessage("INF0009", "");
+			let returnMessage = getMessage("INFO0009", "");
 			$("#message").text(returnMessage);
 			$("#loginBtn").prop('disabled', true);
 		} else {

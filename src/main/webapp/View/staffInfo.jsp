@@ -1,19 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" 
 %>
-<%@page import="Model.Bean.StaffBean"%>
 
 <%
-	StaffBean loggedInStaff = (StaffBean) session.getAttribute("loggedInStaff");
-	int loggedInStaffCode = -1;
-	boolean isAdmin = false;
-	if (loggedInStaff == null) {
+	String staffSession = (String) session.getAttribute("loggedInStaffId");
+	if (staffSession == null) {
 		response.sendRedirect("login.jsp");
-	} else {
-		loggedInStaffCode = loggedInStaff.getStaff_code();
-		isAdmin = loggedInStaff.isAdmin();
-	}
-	
+	} 
 %>
 
 
@@ -126,7 +119,8 @@
 	$(function() {
 		
 		function checkAdmin() {
-			if (<%= isAdmin %>) 
+			var isAdmin = ${sessionScope.loggedInStaffIsAdmin};
+			if (!isAdmin) 
 				$(".adminmenu").hide();
 		}
 		
@@ -156,7 +150,7 @@
 		checkAdmin();
 		
 		var staff_code = 0;
-		var loggedInStaffCode = <%= loggedInStaffCode %>;
+		var loggedInStaffCode = ${sessionScope.loggedInStaffCode};
 		var staff_id = '${param.staff_id}';
 		
 		function GetStaffData() {
@@ -245,7 +239,7 @@
 
 		$("#tb_staff_password_confirm").focusout(function(){
 			if ($("#tb_staff_password_new").val() != $(this).val()) {
-				$("#message").text(getMessage("INF0012", ""));
+				$("#message").text(getMessage("INFO0012", ""));
 				$("#tb_staff_password_confirm").css("border-color", "red");
 				$("#submitBtn").prop('disabled', true);
 			} else {
@@ -265,31 +259,31 @@
 			var passOk = false;
 			var msgtext = "";
 			if (!nameCheck.test($("#tb_staff_name").val())){
-				msgtext = getMessage("INF0004", "");
+				msgtext = getMessage("INFO0004", "");
 				$("#tb_staff_name").css("border-color", "red");
 			} else {
 				if ($("#tb_staff_name").val().length < 3 || $("#tb_staff_name").val().length > 8) {
-					msgtext = getMessage("INF0005", "");
+					msgtext = getMessage("INFO0005", "");
 					$("#tb_staff_name").css("border-color", "red");
 				} else {
 					$("#tb_staff_name").css("border-color", "black");
 					if (!idpassCheck.test($('#tb_staff_id').val())) {
-						msgtext = getMessage("INF0001", "");
+						msgtext = getMessage("INFO0001", "");
 						$("#tb_staff_id").css("border-color", "red");
 					} else {
 						if ($('#tb_staff_id').val().length < 6 || $('#tb_staff_id').val().length > 10) {
-							msgtext = getMessage("INF0002", "");
+							msgtext = getMessage("INFO0002", "");
 							$("#tb_staff_id").css("border-color", "red");
 						} else {
 							$("#tb_staff_id").css("border-color", "black");
 							if ($("#tb_staff_password").is(':hidden') == false) {
 								if (!idpassCheck.test($('#tb_staff_password').val())) {
-									msgtext = getMessage("INF0002", "");
+									msgtext = getMessage("INFO0002", "");
 									$("#tb_staff_password").css("border-color", "red");
 								} else {
 									if ($('#tb_staff_password').val().length < 6 || $('#tb_staff_password').val().length > 10) {
 										$("#tb_staff_password").css("border-color", "red");
-										msgtext = getMessage("INF0001", "");
+										msgtext = getMessage("INFO0001", "");
 									} else {
 										$("#tb_staff_password").css("border-color", "black");
 										passOk=true;
@@ -301,11 +295,11 @@
 							
 							if (passOk) {
 								if (!idpassCheck.test($('#tb_staff_password_new').val())) {
-									msgtext = getMessage("INF0002", "");
+									msgtext = getMessage("INFO0002", "");
 									$("#tb_staff_password_new").css("border-color", "red");
 								} else {
 									if ($('#tb_staff_password_new').val().length < 6 || $('#tb_staff_password_new').val().length > 10) {
-										msgtext = getMessage("INF0001", "");
+										msgtext = getMessage("INFO0001", "");
 										$("#tb_staff_password_new").css("border-color", "red");
 									} else {
 										$("#tb_staff_password_new").css("border-color", "black");
@@ -313,7 +307,7 @@
 											disableSubmit = false;
 										} else {
 											if ($("#tb_staff_password_new").val() != $('#tb_staff_password_confirm').val()) {
-												msgText = getMessage('INF0012', '');
+												msgText = getMessage('INFO0012', '');
 												$("#tb_staff_password_confirm").css("border-color", "red");
 											} else {
 												disableSubmit = false;

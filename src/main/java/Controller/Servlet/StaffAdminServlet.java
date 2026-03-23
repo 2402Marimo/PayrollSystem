@@ -76,10 +76,10 @@ public class StaffAdminServlet extends HttpServlet {
 				StaffBean deletedStaff = staffLogic.GetStaffData(staff_id);
 				staffLogic.deleteStaffData(staff_id);
 	        	
-				String returnMessage = DisplayMessage.getMessageData("INF0009", new String[] {deletedStaff.getStaff_name(), "","",""});
+				String returnMessage = DisplayMessage.getMessageData("INFO0009", new String[] {deletedStaff.getStaff_name(), "","",""});
 	        	jsonResponse = "{\"status\":200, \"message\":\"" + returnMessage +"\"}"; 
 			} catch (Exception ex) {
-				String returnMessage = DisplayMessage.getMessageData("INF0017", null);
+				String returnMessage = DisplayMessage.getMessageData("INFO0017", null);
 				jsonResponse = "{\"status\":400, \"message\":\"" + returnMessage +"\"}";
 			}
 			

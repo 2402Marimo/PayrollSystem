@@ -5,21 +5,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 /**
- * Servlet implementation class LogoutServlet
+ * Servlet implementation class PayrollAdminServlet
  */
-@WebServlet("/LogoutServlet")
-public class LogoutServlet extends HttpServlet {
+@WebServlet("/PayrollAdminServlet")
+public class PayrollAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogoutServlet() {
+    public PayrollAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,11 +27,7 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession oldSession = request.getSession(false); // Get existing session, don't create a new one
-		if (oldSession != null) {
-			oldSession.invalidate(); // Invalidate the session
-		}
-		response.sendRedirect("View/login.jsp");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
