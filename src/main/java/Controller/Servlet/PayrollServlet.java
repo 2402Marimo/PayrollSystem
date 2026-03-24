@@ -111,7 +111,6 @@ public class PayrollServlet extends HttpServlet {
 				
 				jsonResponse = "{\"status\": 200, \"message\":\""+message+"\"}"; 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				jsonResponse = "{\"status\": 400}"; 
 			}

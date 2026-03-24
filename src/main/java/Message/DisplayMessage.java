@@ -22,7 +22,6 @@ public class DisplayMessage {
                 Element e = (Element) nList.item(i);
                 
                 if (e.getAttribute("code").equals(messageCode)) {
-                	System.out.println(file.getAbsolutePath());
                 	messageText = e.getAttribute("text");
                 	break;
                 }

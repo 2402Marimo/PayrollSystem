@@ -23,10 +23,7 @@ public class StaffDao {
 				record.setStaff_name(rs.getString("STAFF_NAME"));
 				record.setStaff_id(rs.getString("STAFF_ID"));
 				record.setStaff_pass(rs.getString("STAFF_PASS"));
-				if (rs.getInt("AUTHORITY_CD") > 0) 
-					record.setAdmin(true);
-				else 
-					record.setAdmin(false);
+				record.setAdmin(rs.getInt("AUTHORITY_CD") == 1);
 				
 				staff.add(record);
 			}
